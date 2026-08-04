@@ -1,0 +1,130 @@
+name: Build iOS IPA (cloud Mac)
+
+# Compiles native/ios into an .ipa on a GitHub-hosted macOS runner.
+# - No Apple secrets set  -> builds an UNSIGNED .ipa (proves the build; not installable)
+# - Apple secrets set      -> builds a SIGNED .ipa (installable via TestFlight / ad-hoc)
+# Run it: push to main, or Actions tab -> "Build iOS IPA (cloud Mac)" -> Run workflow.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - 'native/**'
+      - 'index.html'
+      - 'styles.css'
+      - 'app.js'
+      - 'manifest.webmanifest'
+      - 'service-worker.js'
+      - 'icons/**'
+      - '.github/workflows/ios-build.yml'
+
+jobs:
+  ios:
+    # macos-15 ships Xcode 16, which Capacitor 8 needs.
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Refresh web assets into native/www
+        run: |
+          cp index.html styles.css app.js manifest.webmanifest service-worker.js native/www/
+          rm -rf native/www/icons && cp -R icons native/www/icons
+
+      - name: Install Capacitor deps & sync iOS
+        working-directory: native
+        run: |
+          npm ci || npm install
+          npx cap sync ios
+
+      - name: Detect Apple signing secrets
+        id: detect
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+        run: |
+          if [ -n "$ASC_KEY_ID" ]; then echo "signed=true" >> "$GITHUB_OUTPUT"; else echo "signed=false" >> "$GITHUB_OUTPUT"; fi
+
+      # -------------------- UNSIGNED (no Apple account) --------------------
+      - name: Build UNSIGNED archive
+        if: steps.detect.outputs.signed == 'false'
+        working-directory: native/ios/App
+        run: |
+          xcodebuild \
+            -project App.xcodeproj \
+            -scheme App \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -archivePath "$RUNNER_TEMP/App.xcarchive" \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
+            archive
+
+      - name: Package UNSIGNED .ipa
+        if: steps.detect.outputs.signed == 'false'
+        run: |
+          cd "$RUNNER_TEMP/App.xcarchive/Products/Applications"
+          mkdir -p "$RUNNER_TEMP/Payload"
+          cp -R App.app "$RUNNER_TEMP/Payload/"
+          ( cd "$RUNNER_TEMP" && zip -qry ReadyDev-unsigned.ipa Payload )
+          echo "IPA_PATH=$RUNNER_TEMP/ReadyDev-unsigned.ipa" >> "$GITHUB_ENV"
+          echo "IPA_NAME=ReadyDev-unsigned-ipa" >> "$GITHUB_ENV"
+
+      # -------------------- SIGNED (needs Apple Developer secrets) --------------------
+      - name: Build & export SIGNED .ipa
+        if: steps.detect.outputs.signed == 'true'
+        working-directory: native/ios/App
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8_BASE64: ${{ secrets.ASC_KEY_P8_BASE64 }}
+          TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          EXPORT_METHOD: ${{ vars.IOS_EXPORT_METHOD }}
+        run: |
+          set -e
+          METHOD="${EXPORT_METHOD:-ad-hoc}"
+          KEYDIR="$HOME/private_keys"; mkdir -p "$KEYDIR"
+          echo "$ASC_KEY_P8_BASE64" | base64 --decode > "$KEYDIR/AuthKey_${ASC_KEY_ID}.p8"
+
+          xcodebuild \
+            -project App.xcodeproj \
+            -scheme App \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -archivePath "$RUNNER_TEMP/App.xcarchive" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$KEYDIR/AuthKey_${ASC_KEY_ID}.p8" \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
+            DEVELOPMENT_TEAM="$TEAM_ID" \
+            CODE_SIGN_STYLE=Automatic \
+            archive
+
+          plist="$GITHUB_WORKSPACE/native/ios/ExportOptions.plist"
+          /usr/libexec/PlistBuddy -c "Set :teamID ${TEAM_ID}" "$plist"
+          /usr/libexec/PlistBuddy -c "Set :method ${METHOD}" "$plist"
+
+          xcodebuild -exportArchive \
+            -archivePath "$RUNNER_TEMP/App.xcarchive" \
+            -exportPath "$RUNNER_TEMP/export" \
+            -exportOptionsPlist "$plist" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$KEYDIR/AuthKey_${ASC_KEY_ID}.p8" \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID"
+
+          IPA=$(ls "$RUNNER_TEMP/export"/*.ipa | head -n1)
+          cp "$IPA" "$RUNNER_TEMP/ReadyDev.ipa"
+          echo "IPA_PATH=$RUNNER_TEMP/ReadyDev.ipa" >> "$GITHUB_ENV"
+          echo "IPA_NAME=ReadyDev-ipa" >> "$GITHUB_ENV"
+
+      - name: Upload .ipa artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.IPA_NAME }}
+          path: ${{ env.IPA_PATH }}
+          if-no-files-found: error

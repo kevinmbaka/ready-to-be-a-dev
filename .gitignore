@@ -1,0 +1,27 @@
+# --- Secrets: never commit these (they sign your app) ---
+native/readydev-release.jks
+native/KEYSTORE-INFO.txt
+*.jks
+*.keystore
+*.p8
+*.p12
+
+# --- Dependencies ---
+node_modules/
+native/node_modules/
+
+# --- Build outputs / caches ---
+build/
+native/android-cli/build/
+native/android/build/
+native/android/app/build/
+native/android/.gradle/
+native/android/gradle/*.zip
+native/ios/App/build/
+native/ios/DerivedData/
+.gradle/
+
+# --- Misc ---
+.DS_Store
+*.log
+Thumbs.db

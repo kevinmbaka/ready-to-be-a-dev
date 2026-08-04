@@ -1,0 +1,8 @@
+{
+  "appId": "com.readydev.app",
+  "appName": "Ready to be a Dev",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false
+  }
+}

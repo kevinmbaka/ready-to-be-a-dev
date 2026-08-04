@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "PowerShell(Write-Output \"PWD: $\\(\\(Get-Location\\).Path\\)\"; foreach \\($c in @\\('python','py','node','npm','java','magick','npx'\\)\\) { $cmd = Get-Command $c -ErrorAction SilentlyContinue; if \\($cmd\\) { Write-Output \"$c -> $\\($cmd.Source\\)\" } else { Write-Output \"$c -> \\(not found\\)\" } }; try { $p = & python -c \"import PIL, sys; print\\('Pillow', PIL.__version__\\)\" 2>$null; if \\($p\\) { Write-Output \"python-PIL: $p\" } else { Write-Output \"python-PIL: \\(not available\\)\" } } catch { Write-Output \"python-PIL: \\(not available\\)\" })",
+      "WebFetch(domain:web.dev)",
+      "WebFetch(domain:developers.google.com)",
+      "PowerShell(python \"C:\\\\Users\\\\HPOMEN~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\D--empty\\\\4e2ca959-473c-4fdb-981e-1c8a965a5d29\\\\scratchpad\\\\make_icons.py\")",
+      "WebFetch(domain:developer.chrome.com)",
+      "WebFetch(domain:foresightmobile.com)",
+      "WebFetch(domain:webkit.org)",
+      "WebFetch(domain:www.androidauthority.com)",
+      "WebFetch(domain:iossubmissionguide.com)",
+      "PowerShell(Set-Location \"D:\\\\empty\\\\native\"; npm install @capacitor/core@latest @capacitor/cli@latest @capacitor/android@latest @capacitor/ios@latest --no-fund --no-audit 2>&1 | Select-Object -Last 20; Write-Output \"EXITCODE=$LASTEXITCODE\")",
+      "PowerShell(Set-Location \"D:\\\\empty\\\\native\"; $env:CAPACITOR_ANDROID_STUDIO_PATH=$null; npx cap add android 2>&1 | Select-Object -Last 25; Write-Output \"EXITCODE=$LASTEXITCODE\")",
+      "PowerShell(Set-Location \"D:\\\\empty\\\\native\"; npx cap add ios 2>&1 | Select-Object -Last 25; Write-Output \"EXITCODE=$LASTEXITCODE\")",
+      "PowerShell(powershell -ExecutionPolicy Bypass -File \"D:\\\\empty\\\\native\\\\android-cli\\\\build-apk.ps1\" 2>&1 | Select-Object -Last 20)",
+      "PowerShell(python \"C:\\\\Users\\\\HPOMEN~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\D--empty\\\\4e2ca959-473c-4fdb-981e-1c8a965a5d29\\\\scratchpad\\\\validate.py\")",
+      "Bash(exit 1)",
+      "Bash(git add *)",
+      "Bash(git -c core.autocrlf=true commit -q -m 'Ready to be a Dev: PWA + signed Android APK + iOS cloud-build setup *)",
+      "Bash(git branch *)"
+    ]
+  }
+}

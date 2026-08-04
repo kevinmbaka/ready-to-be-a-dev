@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Ready to be a Dev</string>
+    <string name="title_activity_main">Ready to be a Dev</string>
+    <string name="package_name">com.readydev.app</string>
+    <string name="custom_url_scheme">com.readydev.app</string>
+</resources>

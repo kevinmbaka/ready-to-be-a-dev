@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Ready to be a Dev</title>
+  <meta name="description" content="A starter app — installs on Android and iPhone straight from the browser. No app store, no sideloading." />
+
+  <!-- PWA / install -->
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#4F46E5" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)" />
+
+  <!-- iOS home-screen install -->
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="ReadyDev" />
+
+  <link rel="icon" href="icons/favicon-32.png" sizes="32x32" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="card" role="main">
+    <div class="logo" aria-hidden="true">&gt;_</div>
+
+    <h1 class="title">I'm ready to be a dev</h1>
+    <p class="subtitle">Fill this in, tick the box, and let's begin.</p>
+
+    <form id="start-form" novalidate>
+      <label class="field-label" for="name">Your name</label>
+      <input
+        id="name"
+        name="name"
+        class="text-box"
+        type="text"
+        inputmode="text"
+        autocomplete="name"
+        placeholder="e.g. Kevin"
+        aria-describedby="name-hint"
+      />
+      <span id="name-hint" class="hint">This just personalises your start screen.</span>
+
+      <label class="check-row">
+        <input type="checkbox" id="ready" name="ready" />
+        <span class="check-box" aria-hidden="true"></span>
+        <span class="check-label">I'm ready to be a dev</span>
+      </label>
+
+      <button id="go" class="btn-primary" type="submit" disabled>Let's go</button>
+      <p id="result" class="result" role="status" aria-live="polite"></p>
+    </form>
+
+    <!-- Install prompt (Android/desktop Chrome). Hidden until installable. -->
+    <button id="install" class="btn-ghost" type="button" hidden>Install this app</button>
+
+    <!-- iOS help (shown only on iPhone/iPad Safari when not installed) -->
+    <div id="ios-help" class="ios-help" hidden>
+      <strong>Install on iPhone:</strong> tap the
+      <span class="ios-share" aria-hidden="true">&#x2191;</span> Share button, then
+      <em>“Add to Home Screen”</em>.
+    </div>
+  </main>
+
+  <footer class="foot">Installable web app · works on Android &amp; iPhone</footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

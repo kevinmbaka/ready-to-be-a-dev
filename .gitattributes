@@ -1,0 +1,14 @@
+# Normalize line endings; keep binaries intact.
+* text=auto
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.apk binary
+*.ipa binary
+*.jks binary
+*.keystore binary
+*.jar binary
+*.p8 binary
+*.p12 binary

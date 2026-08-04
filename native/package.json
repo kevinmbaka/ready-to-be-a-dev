@@ -1,0 +1,15 @@
+{
+  "name": "readydev-native",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Native Android/iOS wrapper for the Ready-to-be-a-Dev PWA (Capacitor)",
+  "scripts": {
+    "sync": "cap sync"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.5.0",
+    "@capacitor/cli": "^8.5.0",
+    "@capacitor/core": "^8.5.0",
+    "@capacitor/ios": "^8.5.0"
+  }
+}
