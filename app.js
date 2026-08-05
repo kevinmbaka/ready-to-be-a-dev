@@ -75,6 +75,21 @@ if (downloads && !isWeb) {
   downloads.hidden = true;
 }
 
+// Show each download's real size, so the labels can't go stale as the
+// files are rebuilt (the iOS .ipa is rebuilt by CI on every push).
+if (downloads && isWeb) {
+  document.querySelectorAll('[data-size-for]').forEach(async (el) => {
+    try {
+      // no-store: a cached HEAD would report the previous build's size.
+      const res = await fetch(el.dataset.sizeFor, { method: 'HEAD', cache: 'no-store' });
+      const len = Number(res.headers.get('content-length'));
+      el.textContent = len ? `${Math.round(len / 1024)} KB` : '';
+    } catch (_) {
+      el.textContent = '';
+    }
+  });
+}
+
 // ---- Native permissions panel ----------------------------------------------
 // Android exposes the `AndroidPerms` bridge (see MainActivity.java).
 // iOS has no equivalent for most of these — see PERMISSIONS.md.
