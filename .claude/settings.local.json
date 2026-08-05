@@ -19,7 +19,10 @@
       "Bash(exit 1)",
       "Bash(git add *)",
       "Bash(git -c core.autocrlf=true commit -q -m 'Ready to be a Dev: PWA + signed Android APK + iOS cloud-build setup *)",
-      "Bash(git branch *)"
+      "Bash(git branch *)",
+      "mcp__claude-in-chrome__list_connected_browsers",
+      "Bash(python \"C:/Users/HPOMEN~1/AppData/Local/Temp/claude/D--empty/4e2ca959-473c-4fdb-981e-1c8a965a5d29/scratchpad/poll_ci.py\")",
+      "Bash(python \"C:/Users/HPOMEN~1/AppData/Local/Temp/claude/D--empty/4e2ca959-473c-4fdb-981e-1c8a965a5d29/scratchpad/get_ci_log.py\")"
     ]
   }
 }

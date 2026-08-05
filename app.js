@@ -67,6 +67,13 @@ if (isIOS && !isStandalone) {
   iosHelp.hidden = false;
 }
 
+// The download links point at files on the website. Inside the packaged native
+// app (APK/IPA) those paths don't exist, so hide that section there.
+const downloads = document.querySelector('.downloads');
+if (downloads && !/^https?:$/.test(location.protocol)) {
+  downloads.hidden = true;
+}
+
 // ---- Service worker (offline + installability) ------------------------------
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {

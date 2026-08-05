@@ -209,6 +209,72 @@ form { text-align: left; }
   cursor: pointer;
 }
 
+/* ---- Downloads ---- */
+.downloads {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  text-align: left;
+}
+
+.dl-title {
+  margin: 0 0 12px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+}
+
+.dl-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s ease, transform 0.08s ease;
+}
+
+.dl-row:hover { border-color: var(--brand); }
+.dl-row:active { transform: translateY(1px); }
+
+.dl-icon {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  font-size: 0.8rem;
+  color: var(--brand-ink);
+  background: linear-gradient(160deg, var(--brand), var(--brand-2));
+  border-radius: 9px;
+}
+
+.dl-text { flex: 1 1 auto; min-width: 0; }
+.dl-text strong { display: block; font-size: 0.95rem; }
+.dl-text small { display: block; margin-top: 2px; font-size: 0.76rem; color: var(--muted); }
+
+.dl-size {
+  flex: 0 0 auto;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.dl-note {
+  margin: 10px 2px 0;
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: var(--muted);
+  text-align: center;
+}
+
 .ios-help {
   margin-top: 16px;
   padding: 12px 14px;

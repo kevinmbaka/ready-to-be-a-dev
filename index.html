@@ -55,6 +55,34 @@
     <!-- Install prompt (Android/desktop Chrome). Hidden until installable. -->
     <button id="install" class="btn-ghost" type="button" hidden>Install this app</button>
 
+    <!-- App file downloads -->
+    <section class="downloads" aria-labelledby="dl-title">
+      <h2 id="dl-title" class="dl-title">Download the app files</h2>
+
+      <a class="dl-row" href="builds/android/ReadyDev.apk" download>
+        <span class="dl-icon" aria-hidden="true">&#9660;</span>
+        <span class="dl-text">
+          <strong>Android APK</strong>
+          <small>Installs straight on any Android phone</small>
+        </span>
+        <span class="dl-size">38 KB</span>
+      </a>
+
+      <a class="dl-row" href="builds/ios/ReadyDev-unsigned.ipa" download>
+        <span class="dl-icon" aria-hidden="true">&#9660;</span>
+        <span class="dl-text">
+          <strong>iPhone IPA</strong>
+          <small>Download on a computer &middot; install with Sideloadly</small>
+        </span>
+        <span class="dl-size">615 KB</span>
+      </a>
+
+      <p class="dl-note">
+        On iPhone, tapping the IPA won&rsquo;t install it &mdash; Apple doesn&rsquo;t allow that.
+        Use <em>Add to Home Screen</em> above, or Sideloadly from a computer.
+      </p>
+    </section>
+
     <!-- iOS help (shown only on iPhone/iPad Safari when not installed) -->
     <div id="ios-help" class="ios-help" hidden>
       <strong>Install on iPhone:</strong> tap the
