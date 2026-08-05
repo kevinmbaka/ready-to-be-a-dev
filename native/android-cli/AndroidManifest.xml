@@ -2,6 +2,24 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.readydev.app">
 
+    <!-- Show notifications (runtime permission on Android 13+/API 33). -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Keep the CPU awake while work is in progress. -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- Run a foreground service (+ its type, required on Android 14+/API 34). -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+
+    <!--
+      Ask to be exempt from battery optimisation / Doze / App Standby.
+      NOTE: Google Play restricts this permission to apps whose core function
+      requires it. Fine for sideloading; expect rejection on Play without a
+      qualifying use case. See PERMISSIONS.md.
+    -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -18,5 +36,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name="com.readydev.app.KeepAliveService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
     </application>
 </manifest>

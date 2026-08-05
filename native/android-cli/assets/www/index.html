@@ -55,6 +55,77 @@
     <!-- Install prompt (Android/desktop Chrome). Hidden until installable. -->
     <button id="install" class="btn-ghost" type="button" hidden>Install this app</button>
 
+    <!-- Permissions panel: only shown inside the native apps -->
+    <section class="perms" id="perms" aria-labelledby="perm-title" hidden>
+      <h2 id="perm-title" class="dl-title">App permissions</h2>
+
+      <div class="perm-row" data-perm="notifications">
+        <span class="perm-text">
+          <strong>Notifications</strong>
+          <small>Let the app show notifications</small>
+        </span>
+        <span class="perm-state" data-state>—</span>
+        <button class="perm-btn" type="button" data-action="notifications">Allow</button>
+      </div>
+
+      <div class="perm-row" data-perm="battery">
+        <span class="perm-text">
+          <strong>Unrestricted battery</strong>
+          <small>Stops Doze &amp; App Standby pausing the app</small>
+        </span>
+        <span class="perm-state" data-state>—</span>
+        <button class="perm-btn" type="button" data-action="battery">Allow</button>
+      </div>
+
+      <div class="perm-row" data-perm="service">
+        <span class="perm-text">
+          <strong>Background service</strong>
+          <small>Keeps running when you leave the app</small>
+        </span>
+        <span class="perm-state" data-state>Off</span>
+        <button class="perm-btn" type="button" data-action="service">Start</button>
+      </div>
+
+      <div class="perm-row" data-perm="wakelock">
+        <span class="perm-text">
+          <strong>Keep awake (wakelock)</strong>
+          <small>Stops the CPU/screen sleeping</small>
+        </span>
+        <span class="perm-state" data-state>Off</span>
+        <button class="perm-btn" type="button" data-action="wakelock">Turn on</button>
+      </div>
+
+      <p class="dl-note" id="perm-note"></p>
+    </section>
+
+    <!-- App file downloads -->
+    <section class="downloads" aria-labelledby="dl-title">
+      <h2 id="dl-title" class="dl-title">Download the app files</h2>
+
+      <a class="dl-row" href="builds/android/ReadyDev.apk" download>
+        <span class="dl-icon" aria-hidden="true">&#9660;</span>
+        <span class="dl-text">
+          <strong>Android APK</strong>
+          <small>Installs straight on any Android phone</small>
+        </span>
+        <span class="dl-size">45 KB</span>
+      </a>
+
+      <a class="dl-row" href="builds/ios/ReadyDev-unsigned.ipa" download>
+        <span class="dl-icon" aria-hidden="true">&#9660;</span>
+        <span class="dl-text">
+          <strong>iPhone IPA</strong>
+          <small>Download on a computer &middot; install with Sideloadly</small>
+        </span>
+        <span class="dl-size">615 KB</span>
+      </a>
+
+      <p class="dl-note">
+        On iPhone, tapping the IPA won&rsquo;t install it &mdash; Apple doesn&rsquo;t allow that.
+        Use <em>Add to Home Screen</em> above, or Sideloadly from a computer.
+      </p>
+    </section>
+
     <!-- iOS help (shown only on iPhone/iPad Safari when not installed) -->
     <div id="ios-help" class="ios-help" hidden>
       <strong>Install on iPhone:</strong> tap the

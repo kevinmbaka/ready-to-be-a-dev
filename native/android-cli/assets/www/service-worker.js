@@ -1,5 +1,5 @@
 // Bump this version whenever you change the app shell to push an update.
-const CACHE = 'readydev-v1';
+const CACHE = 'readydev-v3';
 
 // App shell — cached on install so the app opens offline after first visit.
 const ASSETS = [
@@ -42,7 +42,27 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Cache-first for static assets.
+  const url = new URL(req.url);
+  const sameOrigin = url.origin === self.location.origin;
+  const isCode = /\.(?:js|css|webmanifest)$/.test(url.pathname);
+
+  // Code changes often, so serve it network-first (falling back to cache when
+  // offline). Without this, a cached app.js can outlive an update and users
+  // keep running old code until the cache version changes.
+  if (sameOrigin && isCode) {
+    event.respondWith(
+      fetch(req)
+        .then((res) => {
+          const copy = res.clone();
+          caches.open(CACHE).then((c) => c.put(req, copy));
+          return res;
+        })
+        .catch(() => caches.match(req))
+    );
+    return;
+  }
+
+  // Cache-first for everything else (icons and other static files).
   event.respondWith(
     caches.match(req).then((cached) => cached || fetch(req))
   );

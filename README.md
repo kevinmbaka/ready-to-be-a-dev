@@ -14,6 +14,9 @@ sideloading tool" at the same time.
 > Want the full "why" behind all of this (Apple's rules, Play Protect, the 2026 Android
 > developer-verification change, sources)? See **[GUIDE.md](GUIDE.md)**.
 
+> **App permissions** (notifications, wakelock, foreground service, battery/App-Standby
+> exemption): what's implemented and what each platform allows — **[PERMISSIONS.md](PERMISSIONS.md)**.
+
 > **Native builds too:** a signed, installable **Android APK** is built at
 > **[builds/android/ReadyDev.apk](builds/android/ReadyDev.apk)**, and a build-ready
 > **iOS Xcode project** is at `native/ios/`. Details, rebuild steps, and why there's no

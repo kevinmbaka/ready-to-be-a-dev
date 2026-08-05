@@ -1,5 +1,6 @@
 import UIKit
 import Capacitor
+import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -7,7 +8,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        // --- Permissions that actually exist on iOS -------------------------
+        // 1. Notifications: iOS shows the system prompt once; after that the
+        //    user changes it in Settings. (Android's POST_NOTIFICATIONS twin.)
+        UNUserNotificationCenter.current()
+            .requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+                if let error = error {
+                    print("Notification authorization error: \(error)")
+                } else {
+                    print("Notifications granted: \(granted)")
+                }
+            }
+
+        // 2. Wake lock: the closest iOS equivalent is keeping the *screen*
+        //    awake. There is no CPU wake lock and no way to opt out of iOS
+        //    power management -- see PERMISSIONS.md.
+        application.isIdleTimerDisabled = true
+
+        // NOTE: iOS has no battery-optimisation exemption, no App Standby
+        // control, and no foreground services. Background work is limited to
+        // the UIBackgroundModes declared in Info.plist, scheduled by iOS.
         return true
     }
 

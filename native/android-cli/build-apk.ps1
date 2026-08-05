@@ -44,23 +44,36 @@ foreach ($f in @('index.html','styles.css','app.js','manifest.webmanifest','serv
 Copy-Item (Join-Path $Repo 'icons') (Join-Path $www 'icons') -Recurse -Force
 
 # --- 1..7 Build --------------------------------------------------------------
-New-Item -ItemType Directory -Force -Path $Build, (Join-Path $Build 'classes'), (Join-Path $Build 'dex') | Out-Null
+New-Item -ItemType Directory -Force -Path $Build, (Join-Path $Build 'classes'), (Join-Path $Build 'dex'), (Join-Path $Build 'gen') | Out-Null
+# Clear stale build output so removed classes never linger in the APK.
+Get-ChildItem (Join-Path $Build 'classes') -Force -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force
+Get-ChildItem (Join-Path $Build 'dex')     -Force -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force
+Get-ChildItem (Join-Path $Build 'gen')     -Force -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force
+Remove-Item (Join-Path $Build 'base.apk')    -Force -ErrorAction SilentlyContinue
+Remove-Item (Join-Path $Build 'aligned.apk') -Force -ErrorAction SilentlyContinue
 Push-Location $Proj
 try {
     Write-Host "1/7 aapt2 compile"
     & $Aapt2 compile --dir res -o "$Build\res.zip"; if ($LASTEXITCODE) { throw "aapt2 compile failed" }
 
-    Write-Host "2/7 aapt2 link"
+    Write-Host "2/7 aapt2 link (--java emits R.java for the code to use)"
     & $Aapt2 link -o "$Build\base.apk" -I $AndroidJar --manifest AndroidManifest.xml `
-        --min-sdk-version 24 --target-sdk-version $Api --version-code 1 --version-name "1.0" "$Build\res.zip"
+        --min-sdk-version 24 --target-sdk-version $Api --version-code 1 --version-name "1.0" `
+        --java "$Build\gen" "$Build\res.zip"
     if ($LASTEXITCODE) { throw "aapt2 link failed" }
 
-    Write-Host "3/7 javac"
-    & $Javac -source 8 -target 8 -bootclasspath $AndroidJar -d "$Build\classes" "src\com\readydev\app\MainActivity.java"
+    Write-Host "3/7 javac (all sources + generated R.java)"
+    $sources = @()
+    $sources += (Get-ChildItem "$Proj\src" -Recurse -Filter *.java | ForEach-Object { $_.FullName })
+    $sources += (Get-ChildItem "$Build\gen" -Recurse -Filter *.java -ErrorAction SilentlyContinue | ForEach-Object { $_.FullName })
+    Write-Host ("      compiling {0} file(s)" -f $sources.Count)
+    & $Javac -source 8 -target 8 -nowarn -bootclasspath $AndroidJar -d "$Build\classes" $sources
     if ($LASTEXITCODE) { throw "javac failed" }
 
     Write-Host "4/7 d8 (dex)"
-    & $D8 --lib $AndroidJar --min-api 24 --output "$Build\dex" "$Build\classes\com\readydev\app\MainActivity.class"
+    $classes = Get-ChildItem "$Build\classes" -Recurse -Filter *.class | ForEach-Object { $_.FullName }
+    Write-Host ("      dexing {0} class file(s)" -f $classes.Count)
+    & $D8 --lib $AndroidJar --min-api 24 --output "$Build\dex" $classes
     if (-not (Test-Path "$Build\dex\classes.dex")) { throw "d8 failed" }
 
     Write-Host "5/7 package assets + dex (jar => forward-slash entries)"
