@@ -96,7 +96,16 @@ On the Android phone:
 GitHub built the iPhone app file for you on a free cloud Mac. Now you grab it and put it on
 your phone with **Sideloadly**. You only need a **free Apple ID** (no $99 needed).
 
-### 4.1 Download the iPhone app file from GitHub
+### 4.1 Download the iPhone app file
+
+**Easiest way — straight from your website (on your PC):**
+open **https://kevinmbaka.github.io/ready-to-be-a-dev/** and click **iPhone IPA** in the
+"Download the app files" box. Save it, then jump to 4.2.
+
+> Do this on your **computer**, not the phone — Sideloadly is a PC program, and tapping an
+> `.ipa` on an iPhone does nothing (Apple doesn't allow installing that way).
+
+**Other way — from the GitHub build page:**
 1. Open **https://github.com/kevinmbaka/ready-to-be-a-dev** → click the **Actions** tab.
 2. Click the newest run named **"Build iOS IPA (cloud Mac)"**.
 3. Wait until it shows a **green check ✓** (first build takes ~10 minutes — grab a snack).

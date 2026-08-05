@@ -8,9 +8,12 @@ For hosting/installing the web app itself, see [README.md](README.md) and [GUIDE
 | Output | Location | Status |
 |--------|----------|--------|
 | **Android APK** (signed, installable) | [`builds/android/ReadyDev.apk`](builds/android/ReadyDev.apk) | ✅ Built |
-| **iOS Xcode project** (build-ready) | `native/ios/` | ✅ Scaffolded (build on a Mac) |
-| **iOS cloud build** (GitHub Actions) | [`.github/workflows/ios-build.yml`](.github/workflows/ios-build.yml) | ✅ Set up — builds an `.ipa` on a cloud Mac, see [`native/ios/CLOUD-BUILD.md`](native/ios/CLOUD-BUILD.md) |
-| **iOS `.ipa`** | — | ❌ Not buildable *on Windows* (needs macOS/Xcode) — use the cloud build above |
+| **iOS Xcode project** (build-ready) | `native/ios/` | ✅ Scaffolded |
+| **iOS cloud build** (GitHub Actions) | [`.github/workflows/ios-build.yml`](.github/workflows/ios-build.yml) | ✅ **Working** — rebuilds the `.ipa` on a cloud Mac on every push |
+| **iOS `.ipa`** (unsigned, for Sideloadly) | [`builds/ios/ReadyDev-unsigned.ipa`](builds/ios/ReadyDev-unsigned.ipa) | ✅ **Built** (by the cloud Mac — cannot be built on Windows) |
+
+Both files are also downloadable from the live website:
+`https://kevinmbaka.github.io/ready-to-be-a-dev/`
 
 ## The Android APK
 
