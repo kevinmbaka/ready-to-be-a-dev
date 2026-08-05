@@ -52,8 +52,8 @@ jobs:
           mkdir -p ios/App/App/public
           cp -R www/. ios/App/App/public/
           printf '%s' '{"appId":"com.readydev.app","appName":"Ready to be a Dev","webDir":"www","android":{"allowMixedContent":false},"packageClassList":[]}' > ios/App/App/capacitor.config.json
-          echo "public contents:"; ls -1 ios/App/App/public
-          echo "config written:"; cat ios/App/App/capacitor.config.json
+          printf '%s\n' "<?xml version='1.0' encoding='utf-8'?>" '<widget version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">' '  <access origin="*" />' '</widget>' > ios/App/App/config.xml
+          echo "generated files:"; ls -1 ios/App/App/public; ls -1 ios/App/App/capacitor.config.json ios/App/App/config.xml
 
       - name: Detect Apple signing secrets
         id: detect
