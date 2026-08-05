@@ -45,9 +45,15 @@ jobs:
         working-directory: native
         run: npm install --no-audit --no-fund --legacy-peer-deps
 
-      - name: Copy web app into iOS project
+      - name: Copy web app into iOS project (replaces cap copy)
         working-directory: native
-        run: npx cap copy ios
+        run: |
+          rm -rf ios/App/App/public
+          mkdir -p ios/App/App/public
+          cp -R www/. ios/App/App/public/
+          printf '%s' '{"appId":"com.readydev.app","appName":"Ready to be a Dev","webDir":"www","android":{"allowMixedContent":false},"packageClassList":[]}' > ios/App/App/capacitor.config.json
+          echo "public contents:"; ls -1 ios/App/App/public
+          echo "config written:"; cat ios/App/App/capacitor.config.json
 
       - name: Detect Apple signing secrets
         id: detect
