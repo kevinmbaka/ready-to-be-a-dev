@@ -35,11 +35,19 @@ jobs:
           cp index.html styles.css app.js manifest.webmanifest service-worker.js native/www/
           rm -rf native/www/icons && cp -R icons native/www/icons
 
-      - name: Install Capacitor deps & sync iOS
-        working-directory: native
+      - name: Tool versions (diagnostics)
         run: |
-          npm ci || npm install
-          npx cap sync ios
+          node -v
+          npm -v
+          xcodebuild -version || true
+
+      - name: Install Capacitor deps
+        working-directory: native
+        run: npm install --no-audit --no-fund --legacy-peer-deps
+
+      - name: Copy web app into iOS project
+        working-directory: native
+        run: npx cap copy ios
 
       - name: Detect Apple signing secrets
         id: detect
